@@ -1,0 +1,184 @@
+-- ================================
+-- PlayVerse Database Setup
+-- ================================
+
+CREATE DATABASE IF NOT EXISTS playverse
+CHARACTER SET utf8mb4
+COLLATE utf8mb4_unicode_ci;
+
+USE playverse;
+
+
+-- ================================
+-- 1) USERS TABLE
+-- ================================
+
+CREATE TABLE users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+
+    username VARCHAR(50) NOT NULL,
+    email VARCHAR(120) NOT NULL,
+    password_hash VARCHAR(255) NOT NULL,
+
+    role ENUM('admin','user') NOT NULL DEFAULT 'user',
+
+    is_active TINYINT(1) NOT NULL DEFAULT 1,
+
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+
+    UNIQUE KEY uq_username (username),
+    UNIQUE KEY uq_email (email),
+
+    KEY idx_role (role),
+    KEY idx_active (is_active)
+) ENGINE=InnoDB;
+
+-- ================================
+-- 2) GAMES TABLE
+-- ================================
+
+CREATE TABLE games (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+
+    name VARCHAR(150) NOT NULL,
+    category VARCHAR(80) NOT NULL,
+
+    sell_price DECIMAL(10,2) NOT NULL DEFAULT 0.00,
+    rent_price_per_month DECIMAL(10,2) NOT NULL DEFAULT 0.00,
+
+    stock_qty INT NOT NULL DEFAULT 0,
+
+    image_filename VARCHAR(255),
+
+    status ENUM('sell','rent','both') NOT NULL DEFAULT 'sell',
+
+    is_active TINYINT(1) NOT NULL DEFAULT 1,
+
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+
+    KEY idx_category (category),
+    KEY idx_status (status),
+    KEY idx_active (is_active),
+    KEY idx_name (name)
+) ENGINE=InnoDB;
+
+-- ================================
+-- 3) GAME STATS TABLE
+-- (Download + Popularity Counter)
+-- ================================
+
+CREATE TABLE game_stats (
+    game_id INT PRIMARY KEY,
+
+    download_count INT NOT NULL DEFAULT 0,
+    popularity_count INT NOT NULL DEFAULT 0,
+
+    last_download_at DATETIME NULL,
+    last_popularity_at DATETIME NULL,
+
+    CONSTRAINT fk_game_stats
+        FOREIGN KEY (game_id)
+        REFERENCES games(id)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE,
+
+    KEY idx_downloads (download_count),
+    KEY idx_popularity (popularity_count)
+) ENGINE=InnoDB;
+
+-- ================================
+-- 4) PAYMENTS TABLE (DEMO)
+-- ================================
+
+CREATE TABLE payments (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+
+    user_id INT NOT NULL,
+    game_id INT NOT NULL,
+
+    payment_type ENUM('buy','rent') NOT NULL,
+
+    amount DECIMAL(10,2) NOT NULL,
+
+    card_holder_name VARCHAR(120) NOT NULL,
+    card_last4 CHAR(4) NOT NULL,
+    card_expiry CHAR(5) NOT NULL,
+
+    payment_status ENUM('success','failed') NOT NULL DEFAULT 'success',
+
+    paid_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT fk_payment_user
+        FOREIGN KEY (user_id)
+        REFERENCES users(id)
+        ON DELETE RESTRICT
+        ON UPDATE CASCADE,
+
+    CONSTRAINT fk_payment_game
+        FOREIGN KEY (game_id)
+        REFERENCES games(id)
+        ON DELETE RESTRICT
+        ON UPDATE CASCADE,
+
+    KEY idx_payment_user (user_id),
+    KEY idx_payment_game (game_id),
+    KEY idx_payment_date (paid_at),
+    KEY idx_payment_type (payment_type)
+) ENGINE=InnoDB;
+
+-- ================================
+-- 5) ACHIEVEMENTS TABLE
+-- ================================
+
+CREATE TABLE achievements (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+
+    code VARCHAR(60) NOT NULL,
+    title VARCHAR(120) NOT NULL,
+    description VARCHAR(255),
+
+    criteria_type ENUM(
+        'first_payment',
+        'downloads_reached',
+        'popularity_reached'
+    ) NOT NULL,
+
+    criteria_value INT NOT NULL DEFAULT 1,
+
+    is_active TINYINT(1) NOT NULL DEFAULT 1,
+
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+
+    UNIQUE KEY uq_code (code),
+    KEY idx_active (is_active),
+    KEY idx_criteria (criteria_type, criteria_value)
+) ENGINE=InnoDB;
+
+-- ================================
+-- 6) USER ACHIEVEMENTS TABLE
+-- ================================
+
+CREATE TABLE user_achievements (
+    user_id INT NOT NULL,
+    achievement_id INT NOT NULL,
+
+    earned_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+
+    PRIMARY KEY (user_id, achievement_id),
+
+    CONSTRAINT fk_user_achievement_user
+        FOREIGN KEY (user_id)
+        REFERENCES users(id)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE,
+
+    CONSTRAINT fk_user_achievement_achievement
+        FOREIGN KEY (achievement_id)
+        REFERENCES achievements(id)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE,
+
+    KEY idx_earned_date (earned_at)
+) ENGINE=InnoDB;

@@ -1,0 +1,132 @@
+*{
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body{
+    margin: 0;
+    height: 100vh;
+    background: linear-gradient(120deg, #0f2027, #203a43, #2c5364);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Main Card */
+
+.auth-container{
+    width: 380px;
+    background: #111;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0px 0px 20px rgba(0,0,0,0.8);
+    text-align: center;
+}
+
+/* Logo */
+
+.logo{
+    font-size: 26px;
+    font-weight: bold;
+    color: #00bfff;
+    margin-bottom: 10px;
+}
+
+.logo span{
+    color: white;
+}
+
+/* Heading */
+
+h2{
+    margin-bottom: 20px;
+    color: white;
+}
+
+/* Inputs */
+
+input{
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    border-radius: 6px;
+    border: none;
+    outline: none;
+    font-size: 14px;
+}
+
+/* Username Message */
+
+#usernameMsg{
+    display: none;          
+    text-align: left;
+    margin-top: 6px;
+    font-size: 13px;
+    padding-left: 2px;
+}
+
+
+#usernameMsg.ok{
+    display: block;
+    color: #27ae60;         
+}
+
+#usernameMsg.err{
+    display: block;
+    color: #e74c3c;          
+}
+/* Button */
+
+button{
+    width: 100%;
+    padding: 10px;
+    margin-top: 15px;
+    border: none;
+    border-radius: 6px;
+    background: #00bfff;
+    color: white;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+button:hover{
+    background: #009acd;
+}
+
+/* Result Message */
+
+#resultMsg{
+    margin-top: 10px;
+    font-size: 14px;
+}
+
+/* Bottom Link */
+
+.bottom-link{
+    margin-top: 15px;
+    font-size: 14px;
+    color: #ccc;
+}
+
+.bottom-link a{
+    color: #00bfff;
+    text-decoration: none;
+}
+
+.bottom-link a:hover{
+    text-decoration: underline;
+}
+/* Per-field error */
+.err{
+    display: none;
+    text-align: left;
+    margin-top: 6px;
+    font-size: 13px;
+    color: #e74c3c;
+}
+
+/* Optional: input red border when invalid */
+.input-error{
+    border: 2px solid #e74c3c !important;
+}
