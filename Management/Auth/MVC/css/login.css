@@ -47,7 +47,7 @@ input{
     font-size: 14px;
 }
 
-button{
+button {
     width: 100%;
     padding: 10px;
     margin-top: 18px;
@@ -57,6 +57,8 @@ button{
     color: white;
     font-size: 15px;
     cursor: pointer;
+    /* Add this line below */
+    transition: background 0.3s ease; 
 }
 
 button:hover{
@@ -86,6 +88,3 @@ button:hover{
     color: #e74c3c;
 }
 
-.input-error{
-    border: 2px solid #e74c3c !important;
-}

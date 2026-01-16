@@ -1,0 +1,158 @@
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    font-family: 'Roboto', sans-serif;
+    background: #0b0c10;
+    color: #c5c6c7;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.checkout-container {
+    width: 100%;
+    max-width: 800px;
+    background: #1f2833;
+    border: 1px solid #66fcf1;
+    border-radius: 8px;
+    padding: 30px;
+    box-shadow: 0 0 30px rgba(102, 252, 241, 0.15);
+}
+
+.terminal-header {
+    border-bottom: 1px solid #45a29e;
+    margin-bottom: 25px;
+    padding-bottom: 10px;
+}
+.terminal-header h2 {
+    margin: 0;
+    font-family: 'Rajdhani', sans-serif;
+    letter-spacing: 2px;
+}
+
+.content-grid {
+    display: flex;
+    gap: 30px;
+}
+
+/* Order Summary */
+.summary-box {
+    flex: 1;
+    background: #0b0c10;
+    padding: 20px;
+    border-radius: 6px;
+    text-align: center;
+}
+.thumb {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 4px;
+    margin-bottom: 15px;
+    border: 1px solid #45a29e;
+}
+.summary-details h3 { margin: 0; color: #fff; font-size: 18px; }
+.total-price {
+    font-size: 32px;
+    color: #66fcf1;
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+/* Form */
+.payment-form { flex: 2; }
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 12px;
+    color: #45a29e;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+input {
+    width: 100%;
+    background: #0b0c10;
+    border: 1px solid #45a29e;
+    color: #fff;
+    padding: 12px;
+    margin-bottom: 15px;
+    font-family: 'Courier New', monospace; /* Monospace for card numbers */
+    border-radius: 4px;
+}
+input:focus { outline: none; border-color: #66fcf1; box-shadow: 0 0 10px rgba(102,252,241,0.2); }
+
+.row { display: flex; gap: 15px; }
+.col { flex: 1; }
+
+.btn-pay {
+    width: 100%;
+    padding: 15px;
+    background: #66fcf1;
+    color: #0b0c10;
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 800;
+    font-size: 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+.btn-pay:hover { background: #fff; }
+.btn-pay:disabled { background: #45a29e; cursor: not-allowed; }
+
+.btn-cancel {
+    display: block;
+    text-align: center;
+    margin-top: 20px;
+    color: #e74c3c;
+    text-decoration: none;
+    font-size: 12px;
+    font-family: 'Rajdhani', sans-serif;
+    letter-spacing: 1px;
+}
+.btn-cancel:hover { text-decoration: underline; }
+
+.msg-text { text-align: center; font-weight: bold; margin-top: 15px; min-height: 20px; }
+
+/* --- MODAL STYLES --- */
+.modal-overlay {
+    position: fixed; top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.85); /* Darker backdrop */
+    display: flex; justify-content: center; align-items: center;
+    visibility: hidden; opacity: 0;
+    transition: 0.3s;
+    z-index: 1000;
+}
+.modal-overlay.show { visibility: visible; opacity: 1; }
+
+.modal-box {
+    background: #1f2833;
+    border: 2px solid #66fcf1;
+    padding: 30px;
+    border-radius: 8px;
+    text-align: center;
+    width: 90%; max-width: 400px;
+    box-shadow: 0 0 40px rgba(102, 252, 241, 0.2);
+    transform: scale(0.9); transition: 0.3s;
+}
+.modal-overlay.show .modal-box { transform: scale(1); }
+
+.modal-title { color: #66fcf1; font-family: 'Rajdhani', sans-serif; margin-top: 0; }
+.modal-text { color: #c5c6c7; font-size: 16px; margin: 20px 0; }
+.highlight { color: #fff; font-weight: bold; font-size: 20px; }
+
+.modal-actions { display: flex; gap: 15px; justify-content: center; }
+.btn-modal {
+    padding: 10px 20px; border: none; font-weight: bold; cursor: pointer;
+    font-family: 'Rajdhani', sans-serif; letter-spacing: 1px;
+}
+.btn-yes { background: #66fcf1; color: #0b0c10; }
+.btn-yes:hover { background: #fff; }
+.btn-no { background: transparent; border: 1px solid #e74c3c; color: #e74c3c; }
+.btn-no:hover { background: #e74c3c; color: white; }

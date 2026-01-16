@@ -1,0 +1,124 @@
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    font-family: 'Roboto', sans-serif;
+    background: #0b0c10;
+    color: #c5c6c7;
+    min-height: 100vh;
+}
+
+/* Navbar */
+.navbar {
+    background: rgba(11, 12, 16, 0.95);
+    padding: 15px 40px;
+    border-bottom: 1px solid #1f2833;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.logo { 
+    font-family: 'Rajdhani', sans-serif; 
+    font-size: 26px; font-weight: 700; color: #66fcf1; letter-spacing: 1.5px; 
+}
+.btn-back {
+    color: #c5c6c7; text-decoration: none; font-weight: bold;
+    font-family: 'Rajdhani', sans-serif; letter-spacing: 1px;
+    transition: 0.3s;
+}
+.btn-back:hover { color: #66fcf1; }
+
+/* Layout */
+.container { max-width: 1000px; margin: 40px auto; padding: 0 20px; }
+
+.details-card {
+    background: #1f2833;
+    border-radius: 8px;
+    display: grid;
+    grid-template-columns: 400px 1fr; /* Image Left, Info Right */
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    border: 1px solid #2d3844;
+}
+
+/* Left Image */
+.image-section {
+    background: #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.game-cover {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.9;
+}
+
+/* Right Info */
+.info-section { padding: 40px; }
+
+.category-tag {
+    color: #66fcf1;
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: bold;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-size: 14px;
+}
+
+.game-title {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 42px;
+    margin: 10px 0 20px 0;
+    color: #fff;
+    line-height: 1.1;
+}
+
+.in-stock { color: #1cc88a; font-weight: bold; font-size: 14px; }
+.out-stock { color: #e74c3c; font-weight: bold; font-size: 14px; }
+
+.divider { border: 0; border-top: 1px solid #2d3844; margin: 30px 0; }
+
+/* Buttons Area */
+.action-area {
+    display: flex;
+    gap: 20px;
+}
+
+.option-box {
+    flex: 1;
+    background: #0b0c10;
+    padding: 20px;
+    border-radius: 6px;
+    border: 1px solid #2d3844;
+    text-align: center;
+    transition: 0.3s;
+}
+.option-box:hover { border-color: #66fcf1; transform: translateY(-3px); }
+
+.price-label { font-size: 12px; color: #888; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px; }
+.price-value { font-family: 'Rajdhani', sans-serif; font-size: 32px; color: #fff; font-weight: bold; margin-bottom: 15px; }
+.price-value span { font-size: 16px; color: #888; }
+
+.btn-action {
+    display: block;
+    padding: 12px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 800;
+    font-size: 18px;
+    letter-spacing: 1px;
+    transition: 0.3s;
+}
+
+.btn-buy {
+    background: #66fcf1; color: #0b0c10;
+}
+.btn-buy:hover { background: #fff; box-shadow: 0 0 15px rgba(102, 252, 241, 0.4); }
+
+.btn-rent {
+    background: transparent; color: #ffc107; border: 1px solid #ffc107;
+}
+.btn-rent:hover { background: #ffc107; color: #000; box-shadow: 0 0 15px rgba(255, 193, 7, 0.4); }

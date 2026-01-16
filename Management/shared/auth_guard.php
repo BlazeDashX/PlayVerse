@@ -1,19 +1,29 @@
 <?php
-// Use this on every protected page (admin/user dashboard etc.)
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-if (!isset($_SESSION['user_id'])) {
-    header("Location: ../../Auth/MVC/html/login.php");
-    exit();
-}
+// This checks if user is logged in AND has the right role
+function protect_page($allowed_role) {
+    if (!isset($_SESSION['user_id'])) {
+        // Not logged in -> Go to Login
+        header("Location: ../../../Auth/MVC/html/login.php");
+        exit();
+    }
 
-// Optional role check helper (call with required role)
-function requireRole($role){
-    if (!isset($_SESSION['role']) || $_SESSION['role'] !== $role) {
-        // if role mismatch, kick to login
-        header("Location: ../../Auth/MVC/html/login.php");
+    if ($_SESSION['role'] !== $allowed_role) {
+        // Wrong Role -> Redirect to their own dashboard
+        if ($_SESSION['role'] === 'admin') {
+            header("Location: ../../../Admin/MVC/html/admin_dashboard.php");
+        } else {
+            header("Location: ../../../User/MVC/html/user_dashboard.php");
+        }
         exit();
     }
 }
+
+// Wrapper function to fix your "undefined function" error
+function requireRole($role) {
+    protect_page($role);
+}
+?>
