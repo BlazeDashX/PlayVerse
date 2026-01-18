@@ -3,12 +3,14 @@ require_once('../../../shared/auth_guard.php');
 protect_page('user');
 require_once('../db/userModel.php');
 
+/* Extract request parameters */
 $gameId = (int)($_GET['id'] ?? 0);
 $type = $_GET['type'] ?? 'buy';
 $game = getGameDetails($gameId);
 
 if (!$game) die("Invalid Game");
 
+/* Calculate transaction values */
 $amount = ($type === 'rent') ? $game['rent_price_per_month'] : $game['sell_price'];
 $label = ($type === 'rent') ? "Monthly Rental" : "One-Time Purchase";
 ?>
@@ -67,7 +69,7 @@ $label = ($type === 'rent') ? "Monthly Rental" : "One-Time Purchase";
         <div class="modal-box">
             <h3 class="modal-title">⚠ CONFIRM TRANSACTION</h3>
             <p class="modal-text">
-                You are about to transfer <span class="highlight">$<?php echo $amount; ?></span> <br>
+                Transfer <span class="highlight">$<?php echo $amount; ?></span> <br>
                 for <b><?php echo htmlspecialchars($game['name']); ?></b>.
             </p>
             <div class="modal-actions">

@@ -16,9 +16,7 @@ protect_page('user');
         <div class="logo">🎮 PlayVerse</div>
         <div class="nav-links">
             <span>PILOT // <b><?php echo htmlspecialchars($_SESSION['username']); ?></b></span>
-            
             <a href="profile.php" class="btn-profile">MY PROFILE</a>
-            
             <a href="../../../Auth/MVC/php/logout.php" class="btn-logout">LOGOUT</a>
         </div>
     </nav>

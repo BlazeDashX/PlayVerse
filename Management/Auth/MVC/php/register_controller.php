@@ -3,9 +3,10 @@ require('../../../shared/db.php');
 
 header('Content-Type: application/json');
 
+/* Initialize response */
 $response = ["status" => "error", "message" => "Invalid request"];
 
-// Must receive JSON string in POST[data]
+/* Validate POST data */
 if (!isset($_POST['data'])) {
     echo json_encode($response);
     exit();
@@ -18,15 +19,13 @@ $email    = trim($data['email'] ?? '');
 $password = $data['password'] ?? '';
 $confirm  = $data['confirmPassword'] ?? '';
 
-// ==========================
-// 1) PHP Validation (ALL errors together)
-// ==========================
+/* Server-side validation */
 $errors = [];
 
 if ($username === '') {
     $errors['username'] = "Username is required.";
 } else if (!preg_match('/^[a-zA-Z0-9_]{3,20}$/', $username)) {
-    $errors['username'] = "Username must be 3-20 chars (letters, numbers, underscore).";
+    $errors['username'] = "Username: 3-20 chars.";
 }
 
 if ($email === '') {
@@ -38,16 +37,15 @@ if ($email === '') {
 if ($password === '') {
     $errors['password'] = "Password is required.";
 } else if (strlen($password) < 6) {
-    $errors['password'] = "Password must be at least 6 characters.";
+    $errors['password'] = "Min 6 characters.";
 }
 
 if ($confirm === '') {
-    $errors['confirmPassword'] = "Confirm password is required.";
+    $errors['confirmPassword'] = "Confirm password required.";
 } else if ($password !== '' && $password !== $confirm) {
-    $errors['confirmPassword'] = "Passwords do not match.";
+    $errors['confirmPassword'] = "Passwords mismatch.";
 }
 
-// If any validation error → return all field errors
 if (count($errors) > 0) {
     echo json_encode([
         "status" => "field_error",
@@ -56,9 +54,7 @@ if (count($errors) > 0) {
     exit();
 }
 
-// ==========================
-// 2) Check username exists
-// ==========================
+/* Check duplicate username */
 $stmt = mysqli_prepare($conn, "SELECT id FROM users WHERE username = ? LIMIT 1");
 mysqli_stmt_bind_param($stmt, "s", $username);
 mysqli_stmt_execute($stmt);
@@ -68,15 +64,13 @@ if (mysqli_stmt_num_rows($stmt) > 0) {
     mysqli_stmt_close($stmt);
     echo json_encode([
         "status" => "field_error",
-        "errors" => ["username" => "Username already exists!"]
+        "errors" => ["username" => "Username taken!"]
     ]);
     exit();
 }
 mysqli_stmt_close($stmt);
 
-// ==========================
-// 3) Check email exists
-// ==========================
+/* Check duplicate email */
 $stmt = mysqli_prepare($conn, "SELECT id FROM users WHERE email = ? LIMIT 1");
 mysqli_stmt_bind_param($stmt, "s", $email);
 mysqli_stmt_execute($stmt);
@@ -86,15 +80,13 @@ if (mysqli_stmt_num_rows($stmt) > 0) {
     mysqli_stmt_close($stmt);
     echo json_encode([
         "status" => "field_error",
-        "errors" => ["email" => "Email already exists!"]
+        "errors" => ["email" => "Email registered!"]
     ]);
     exit();
 }
 mysqli_stmt_close($stmt);
 
-// ==========================
-// 4) Insert User (default role = user)
-// ==========================
+/* Insert new user */
 $hash = password_hash($password, PASSWORD_DEFAULT);
 
 $stmt = mysqli_prepare(
@@ -106,12 +98,12 @@ mysqli_stmt_bind_param($stmt, "sss", $username, $email, $hash);
 if (mysqli_stmt_execute($stmt)) {
     echo json_encode([
         "status" => "success",
-        "message" => "✅ Registration successful! You can login now."
+        "message" => "Registration successful!"
     ]);
 } else {
     echo json_encode([
         "status" => "error",
-        "message" => "❌ Registration failed! Try again."
+        "message" => "Registration failed!"
     ]);
 }
 

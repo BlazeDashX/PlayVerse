@@ -1,7 +1,7 @@
 <?php
 require_once(__DIR__ . '/../../../shared/db.php');
 
-// 1. Get Basic User Info
+/* Fetch account details */
 function getUserInfo($id) {
     global $conn;
     $stmt = mysqli_prepare($conn, "SELECT username, email, created_at FROM users WHERE id = ?");
@@ -10,17 +10,17 @@ function getUserInfo($id) {
     return mysqli_stmt_get_result($stmt)->fetch_assoc();
 }
 
-// 2. Get Stats (Achievements & Total Money Spent)
+/* Fetch aggregate metrics */
 function getUserStats($id) {
     global $conn;
     
-    // Count Achievements
+    /* Count unlocked achievements */
     $stmt1 = mysqli_prepare($conn, "SELECT COUNT(*) as count FROM user_achievements WHERE user_id = ?");
     mysqli_stmt_bind_param($stmt1, "i", $id);
     mysqli_stmt_execute($stmt1);
     $ach = mysqli_stmt_get_result($stmt1)->fetch_assoc();
 
-    // Sum Payments (Total Value)
+    /* Calculate total expenditure */
     $stmt2 = mysqli_prepare($conn, "SELECT COALESCE(SUM(amount), 0.00) as total_spent FROM payments WHERE user_id = ? AND payment_status = 'success'");
     mysqli_stmt_bind_param($stmt2, "i", $id);
     mysqli_stmt_execute($stmt2);
@@ -32,7 +32,7 @@ function getUserStats($id) {
     ];
 }
 
-// 3. Update Basic Info
+/* Update account fields */
 function updateProfile($id, $username, $email) {
     global $conn;
     $stmt = mysqli_prepare($conn, "UPDATE users SET username = ?, email = ? WHERE id = ?");
@@ -40,7 +40,7 @@ function updateProfile($id, $username, $email) {
     return mysqli_stmt_execute($stmt);
 }
 
-// 4. Check Password
+/* Validate existing password */
 function verifyCurrentPassword($id, $password) {
     global $conn;
     $stmt = mysqli_prepare($conn, "SELECT password_hash FROM users WHERE id = ?");
@@ -50,7 +50,7 @@ function verifyCurrentPassword($id, $password) {
     return password_verify($password, $res['password_hash']);
 }
 
-// 5. Update Password
+/* Set new password */
 function updatePassword($id, $newHash) {
     global $conn;
     $stmt = mysqli_prepare($conn, "UPDATE users SET password_hash = ? WHERE id = ?");
@@ -58,7 +58,7 @@ function updatePassword($id, $newHash) {
     return mysqli_stmt_execute($stmt);
 }
 
-// 6. Delete Account (Soft Delete)
+/* Disable user account */
 function deactivateAccount($id) {
     global $conn;
     $stmt = mysqli_prepare($conn, "UPDATE users SET is_active = 0 WHERE id = ?");
@@ -66,6 +66,7 @@ function deactivateAccount($id) {
     return mysqli_stmt_execute($stmt);
 }
 
+/* Fetch achievement list */
 function getUserBadges($userId) {
     global $conn;
     $sql = "SELECT a.title, a.description, a.code 

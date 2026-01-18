@@ -2,15 +2,15 @@
 require_once('../../../shared/auth_guard.php');
 protect_page('admin'); 
 
-// --- CONNECT TO MODELS ---
-require_once('../db/dashboardModel.php'); // For Stats
-require_once('../db/gameModel.php');      // For Game List
+/* Admin page security */
+require_once('../db/dashboardModel.php');
+require_once('../db/gameModel.php');
 
 if (session_status() === PHP_SESSION_NONE) { session_start(); }
 
-// --- FETCH DATA ---
-$stats = getAdminStats(); // Gets the fixed "All Time" stats
-$allGames = getAllGames(); // Gets the inventory
+/* Load dashboard data */
+$stats = getAdminStats();
+$allGames = getAllGames();
 
 $msg = $_GET['msg'] ?? '';
 ?>
@@ -20,22 +20,11 @@ $msg = $_GET['msg'] ?? '';
     <meta charset="UTF-8">
     <title>PlayVerse | Admin</title>
     <link rel="stylesheet" href="../css/admin_dashboard.css">
-    <style>
-        /* Popup Styles */
-        .popup-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.5); display: flex; justify-content: center; align-items: center;
-            visibility: hidden; opacity: 0; transition: 0.3s; z-index: 999;
-        }
-        .popup-overlay.show { visibility: visible; opacity: 1; }
-        .popup-content { background: white; padding: 30px; border-radius: 8px; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
-        .popup-btn { background: #4e73df; color: white; border: none; padding: 8px 20px; border-radius: 4px; cursor: pointer; margin-top: 15px; }
-    </style>
 </head>
 <body>
 
 <div class="topbar">
-    <h2>🎮 PlayVerse <span class="brand-highlight">Admin</span></h2>
+    <h2>寒 PlayVerse <span class="brand-highlight">Admin</span></h2>
     <div>
         <span>Welcome, <b><?php echo htmlspecialchars($_SESSION['username']); ?></b></span> &nbsp;
         <a href="../../../Auth/MVC/php/logout.php" class="btn btn-danger">Logout</a>
@@ -72,9 +61,8 @@ $msg = $_GET['msg'] ?? '';
     </div>
 
     <div class="card-section">
-        <h3>➕ Add New Game</h3>
+        <h3>每 Add New Game</h3>
         <form action="../php/add_game.php" method="POST" enctype="multipart/form-data">
-            
             <div class="form-row">
                 <input type="text" name="name" placeholder="Game Title" required>
                 <input type="text" name="category" placeholder="Category (e.g. Action)" required>
@@ -102,7 +90,7 @@ $msg = $_GET['msg'] ?? '';
     </div>
 
     <div class="card-section">
-        <h3>📦 Inventory Management</h3>
+        <h3>箱 Inventory Management</h3>
         <table>
             <thead>
                 <tr>
@@ -151,6 +139,7 @@ $msg = $_GET['msg'] ?? '';
 </div>
 
 <script>
+    /* Handle status notifications */
     const msg = "<?php echo isset($msg) ? htmlspecialchars($msg) : ''; ?>";
     if (msg !== "") {
         document.getElementById('popupMsg').innerText = msg;

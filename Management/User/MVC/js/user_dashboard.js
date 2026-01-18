@@ -1,9 +1,10 @@
+/* Initial load */
 window.onload = function() {
     loadPopularGames();
     loadAllGames();
 };
 
-// 1. Trending
+/* Fetch trending games */
 function loadPopularGames() {
     let xhttp = new XMLHttpRequest();
     xhttp.open('POST', '../php/library_controller.php', true);
@@ -18,7 +19,7 @@ function loadPopularGames() {
     xhttp.send('action=fetch_popular');
 }
 
-// 2. Load All Games + Sort
+/* Fetch all games */
 function loadAllGames() {
     let xhttp = new XMLHttpRequest();
     xhttp.open('POST', '../php/library_controller.php', true);
@@ -27,18 +28,14 @@ function loadAllGames() {
     xhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
             let games = JSON.parse(this.responseText);
-            
-            // Render the Marketplace
             renderGames(games, "all-games-container", false);
-
-            // Filter for Owned & Rented
             filterLibrary(games);
         }
     };
     xhttp.send('action=fetch_all');
 }
 
-// 3. Sort Library
+/* Sort user library */
 function filterLibrary(games) {
     let ownedGames = [];
     let rentedGames = [];
@@ -62,7 +59,7 @@ function filterLibrary(games) {
     }
 }
 
-// 4. Render Cards
+/* Build game cards */
 function renderGames(games, containerId, isPopular) {
     let container = document.getElementById(containerId);
     let html = "";
@@ -74,27 +71,25 @@ function renderGames(games, containerId, isPopular) {
 
     for (let i = 0; i < games.length; i++) {
         let g = games[i];
-        
         let imgPath = g.image_filename 
             ? `../../../Admin/MVC/images/uploaded/${g.image_filename}` 
             : `../../../Admin/MVC/images/default_game.png`; 
 
-        // --- BADGE LOGIC UPDATED ---
+        /* Define status badges */
         let badgeHTML = "";
-        let sellPrice = parseFloat(g.sell_price); // Convert string to number
+        let sellPrice = parseFloat(g.sell_price);
 
         if (g.owned_status === 'buy') {
             badgeHTML = `<span class="badge badge-owned">✅ OWNED</span>`;
         } else if (g.owned_status === 'rent') {
             badgeHTML = `<span class="badge badge-rented">⏳ RENTED</span>`;
         } else if (sellPrice === 0) {
-            // NEW: Check for Free Game
             badgeHTML = `<span class="badge badge-free">🎁 FREE</span>`;
         } else if (isPopular) {
             badgeHTML = `<span class="badge badge-hot">🔥 HOT</span>`;
         }
 
-        // --- BUTTON LOGIC ---
+        /* Define buttons */
         let actionBtn = "";
         if (g.owned_status === 'buy' || g.owned_status === 'rent') {
              actionBtn = `<button class="btn-view btn-download" 
@@ -105,7 +100,6 @@ function renderGames(games, containerId, isPopular) {
             actionBtn = `<button class="btn-view" onclick="viewGame(${g.id})">VIEW DETAILS</button>`;
         }
 
-        // Optional: formatting price tag to look nicer for free games
         let displaySellPrice = (sellPrice === 0) ? "FREE" : "$" + g.sell_price;
 
         html += `
@@ -127,21 +121,22 @@ function renderGames(games, containerId, isPopular) {
     container.innerHTML = html;
 }
 
+/* Redirect to details */
 function viewGame(id) {
     window.location.href = "game_details.php?id=" + id;
 }
 
-// 5. Download Logic
+/* Execute download process */
 function downloadGame(id, filename) {
-    if(!confirm("Start downloading " + filename + "?")) return;
+    if(!confirm("Start download?")) return;
 
-    // A. Record stats
+    /* Update stats */
     let xhttp = new XMLHttpRequest();
     xhttp.open('POST', '../php/library_controller.php', true);
     xhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
     xhttp.send('action=record_download&game_id=' + id);
 
-    // B. Trigger Download
+    /* Trigger file browser */
     let link = document.createElement('a');
     link.href = `../../../Admin/MVC/images/uploaded/${filename}`;
     link.download = filename; 
@@ -149,5 +144,5 @@ function downloadGame(id, filename) {
     link.click();
     document.body.removeChild(link);
 
-    alert("Download Started! (Check your downloads folder)");
+    alert("Download Started!");
 }

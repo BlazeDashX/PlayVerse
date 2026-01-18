@@ -5,18 +5,18 @@ const btnNo = document.getElementById('btnNo');
 const mainBtn = document.getElementById('payBtn');
 const msg = document.getElementById('msg');
 
-// 1. Show Popup on Submit
+/* Show confirmation modal */
 form.addEventListener('submit', function(e) {
     e.preventDefault();
     modal.classList.add('show');
 });
 
-// 2. Hide Popup on Cancel
+/* Close confirmation modal */
 btnNo.addEventListener('click', function() {
     modal.classList.remove('show');
 });
 
-// 3. Process Payment on Confirm
+/* Handle payment execution */
 btnYes.addEventListener('click', function() {
     modal.classList.remove('show');
     mainBtn.disabled = true;
@@ -54,7 +54,7 @@ btnYes.addEventListener('click', function() {
     xhttp.send('action=pay&data=' + JSON.stringify(data));
 });
 
-// Auto-format card number
+/* Format card input */
 document.getElementById('cardNum').addEventListener('input', function (e) {
     e.target.value = e.target.value.replace(/[^\d]/g, '').replace(/(.{4})/g, '$1 ').trim();
 });

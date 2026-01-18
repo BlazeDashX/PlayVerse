@@ -8,8 +8,7 @@ protect_page('user');
 <head>
     <meta charset="UTF-8">
     <title>Pilot Profile | PlayVerse</title>
-    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;700&family=Roboto:wght@400;500&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../css/profile.css">
 </head>
 
@@ -82,8 +81,7 @@ protect_page('user');
 
                         <div class="show-pass-wrapper">
                             <input type="checkbox" id="togglePass" onclick="togglePasswords()">
-                            <label for="togglePass" style="display:inline; margin:0; cursor:pointer;">Show
-                                Characters</label>
+                            <label for="togglePass" style="display:inline; margin:0; cursor:pointer;">Show Characters</label>
                         </div>
 
                         <button type="submit" class="btn-save btn-warn">CHANGE PASSPHRASE</button>
@@ -92,7 +90,7 @@ protect_page('user');
 
                 <div class="setting-box danger-zone">
                     <h3 style="color:#e74c3c">⚠ DANGER ZONE</h3>
-                    <p>Deleting your account will remove your access to all owned games.</p>
+                    <p>Deleting your account removes access to all owned games.</p>
                     <button onclick="deleteAccount()" class="btn-delete">DELETE ACCOUNT PERMANENTLY</button>
                 </div>
 
@@ -112,5 +110,4 @@ protect_page('user');
     <script src="../js/profile.js"></script>
 
 </body>
-
 </html>

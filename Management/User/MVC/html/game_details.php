@@ -6,19 +6,19 @@ require_once('../db/userModel.php');
 $id = (int)($_GET['id'] ?? 0);
 $userId = $_SESSION['user_id'];
 
-// Fetch Game Info
+/* Fetch game details */
 $game = getGameDetails($id);
 if (!$game) {
     header("Location: user_dashboard.php");
     exit();
 }
 
-// Check Ownership (Direct Query)
+/* Check ownership status */
 $checkOwn = mysqli_query($conn, "SELECT payment_type FROM payments WHERE user_id=$userId AND game_id=$id AND payment_status='success' LIMIT 1");
 $ownedData = mysqli_fetch_assoc($checkOwn);
 $isOwned = $ownedData ? true : false;
 
-// Image Logic
+/* Resolve image path */
 $imgFile = $game['image_filename'];
 $displayImg = (!empty($imgFile) && file_exists(__DIR__ . "/../../../Admin/MVC/images/uploaded/" . $imgFile)) 
     ? "../../../Admin/MVC/images/uploaded/" . $imgFile 
@@ -42,7 +42,6 @@ $displayImg = (!empty($imgFile) && file_exists(__DIR__ . "/../../../Admin/MVC/im
     </nav>
 
     <div class="container">
-        
         <div class="details-card">
             <div class="image-section">
                 <img src="<?php echo htmlspecialchars($displayImg); ?>" alt="Cover" class="game-cover">
@@ -50,14 +49,13 @@ $displayImg = (!empty($imgFile) && file_exists(__DIR__ . "/../../../Admin/MVC/im
 
             <div class="info-section">
                 <span class="category-tag"><?php echo htmlspecialchars($game['category']); ?></span>
-                
                 <h1 class="game-title"><?php echo htmlspecialchars($game['name']); ?></h1>
                 
                 <div class="stock-status">
                     <?php if($game['stock_qty'] > 0): ?>
-                        <span class="in-stock">✓ INSTANT DELIVERY AVAILABLE</span>
+                        <span class="in-stock">✓ INSTANT DELIVERY</span>
                     <?php else: ?>
-                        <span class="out-stock">⚠ CURRENTLY OUT OF STOCK</span>
+                        <span class="out-stock">⚠ OUT OF STOCK</span>
                     <?php endif; ?>
                 </div>
 
@@ -66,8 +64,8 @@ $displayImg = (!empty($imgFile) && file_exists(__DIR__ . "/../../../Admin/MVC/im
                 <div class="action-area">
                     <?php if ($isOwned): ?>
                         <div class="option-box" style="border-color: #1cc88a;">
-                            <div class="price-label" style="color:#1cc88a;">✅ ALREADY IN LIBRARY</div>
-                            <div class="price-value">READY TO PLAY</div>
+                            <div class="price-label" style="color:#1cc88a;">✅ IN LIBRARY</div>
+                            <div class="price-value">READY</div>
                             
                             <a href="../../../Admin/MVC/images/uploaded/<?php echo $game['image_filename']; ?>" 
                                download="<?php echo $game['image_filename']; ?>"
@@ -80,7 +78,7 @@ $displayImg = (!empty($imgFile) && file_exists(__DIR__ . "/../../../Admin/MVC/im
                     <?php else: ?>
                         <?php if($game['status'] !== 'rent' && $game['stock_qty'] > 0): ?>
                         <div class="option-box">
-                            <div class="price-label">OWN IT FOREVER</div>
+                            <div class="price-label">OWN FOREVER</div>
                             <div class="price-value">$<?php echo $game['sell_price']; ?></div>
                             <a href="payment.php?id=<?php echo $game['id']; ?>&type=buy" class="btn-action btn-buy">BUY NOW</a>
                         </div>
@@ -95,16 +93,14 @@ $displayImg = (!empty($imgFile) && file_exists(__DIR__ . "/../../../Admin/MVC/im
                         <?php endif; ?>
                     <?php endif; ?>
                 </div>
-
             </div>
         </div>
-
     </div>
 
     <input type="hidden" id="gameId" value="<?php echo $game['id']; ?>">
     
-    <script src="../js/game_details.js"></script>
     <script>
+        /* Record game download */
         function trackDownload(gid) {
             let x = new XMLHttpRequest();
             x.open('POST', '../php/library_controller.php', true);
@@ -113,6 +109,5 @@ $displayImg = (!empty($imgFile) && file_exists(__DIR__ . "/../../../Admin/MVC/im
             alert("Download Started!");
         }
     </script>
-
 </body>
 </html>

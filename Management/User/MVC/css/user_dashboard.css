@@ -1,20 +1,15 @@
-/* =========================================
-   1. GLOBAL RESET & FONTS
-   ========================================= */
+/* Global reset */
 * { box-sizing: border-box; }
 
 body {
     margin: 0;
     font-family: 'Roboto', sans-serif;
-    /* Deep dark background */
     background: #0b0c10; 
     color: #c5c6c7;
     min-height: 100vh;
 }
 
-/* =========================================
-   2. NAVBAR STYLES
-   ========================================= */
+/* Navbar container */
 .navbar {
     background: rgba(11, 12, 16, 0.95);
     padding: 15px 40px;
@@ -27,11 +22,12 @@ body {
     z-index: 100;
 }
 
+/* Branding logo */
 .logo {
     font-family: 'Rajdhani', sans-serif;
     font-size: 26px;
     font-weight: 700;
-    color: #66fcf1; /* Neon Cyan */
+    color: #66fcf1; 
     letter-spacing: 1.5px;
     text-transform: uppercase;
 }
@@ -49,7 +45,7 @@ body {
     letter-spacing: 1px;
 }
 
-/* My Profile Button */
+/* Profile link */
 .btn-profile {
     font-family: 'Rajdhani', sans-serif;
     color: #66fcf1;
@@ -69,7 +65,7 @@ body {
     box-shadow: 0 0 10px rgba(102, 252, 241, 0.4);
 }
 
-/* Logout Button */
+/* Logout link */
 .btn-logout {
     font-family: 'Rajdhani', sans-serif;
     color: #e74c3c;
@@ -88,9 +84,7 @@ body {
     box-shadow: 0 0 10px rgba(231, 76, 60, 0.4);
 }
 
-/* =========================================
-   3. MAIN LAYOUT & SECTIONS
-   ========================================= */
+/* Layout container */
 .container {
     max-width: 1400px;
     margin: 0 auto;
@@ -101,6 +95,7 @@ body {
     margin-bottom: 50px;
 }
 
+/* Section heading */
 .section-title {
     font-family: 'Rajdhani', sans-serif;
     font-size: 28px;
@@ -121,15 +116,14 @@ body {
     letter-spacing: 1px;
 }
 
-/* =========================================
-   4. GAME GRID & CARDS
-   ========================================= */
+/* Responsive grid */
 .game-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
     gap: 30px;
 }
 
+/* Game card */
 .game-card {
     background: #1f2833;
     border-radius: 8px;
@@ -146,7 +140,7 @@ body {
     box-shadow: 0 10px 25px rgba(0,0,0,0.5);
 }
 
-/* Card Image */
+/* Cover image */
 .card-img {
     height: 170px;
     width: 100%;
@@ -160,7 +154,7 @@ body {
     filter: brightness(1.1);
 }
 
-/* Card Body */
+/* Content area */
 .card-body {
     padding: 20px;
 }
@@ -185,13 +179,14 @@ body {
     font-weight: 600;
 }
 
-/* Prices Row */
+/* Price layout */
 .prices {
     display: flex;
     gap: 10px;
     margin-bottom: 18px;
 }
 
+/* Price labels */
 .price-tag {
     background: rgba(102, 252, 241, 0.1);
     color: #66fcf1;
@@ -205,13 +200,11 @@ body {
 
 .price-tag.rent {
     background: rgba(255, 193, 7, 0.1);
-    color: #ffc107; /* Amber/Yellow */
+    color: #ffc107; 
     border-color: #ffc107;
 }
 
-/* =========================================
-   5. BADGES (Top Right Corner)
-   ========================================= */
+/* Status badges */
 .badge {
     position: absolute;
     top: 10px;
@@ -228,33 +221,31 @@ body {
 }
 
 .badge-hot {
-    background: #ff0055; /* Neon Pink */
+    background: #ff0055; 
     color: white;
     border: 1px solid #ff0055;
 }
 
 .badge-owned {
-    background: #1cc88a; /* Green */
+    background: #1cc88a; 
     color: #0b0c10;
     border: 1px solid #1cc88a;
 }
 
 .badge-rented {
-    background: #f6c23e; /* Orange */
+    background: #f6c23e; 
     color: #0b0c10;
     border: 1px solid #f6c23e;
 }
 
 .badge-free {
-    background: #a55eea; /* Neon Purple */
+    background: #a55eea; 
     color: #fff;
     border: 1px solid #a55eea;
     box-shadow: 0 0 10px rgba(165, 94, 234, 0.5);
 }
 
-/* =========================================
-   6. ACTION BUTTONS
-   ========================================= */
+/* Action buttons */
 .btn-view {
     width: 100%;
     padding: 12px;
@@ -269,7 +260,7 @@ body {
     letter-spacing: 1px;
 }
 
-/* Standard "View Details" (Blue Gradient) */
+/* Details button */
 .btn-view {
     background: linear-gradient(135deg, #66fcf1 0%, #45a29e 100%);
     color: #0b0c10;
@@ -279,11 +270,11 @@ body {
     box-shadow: 0 0 15px rgba(102, 252, 241, 0.4);
 }
 
-/* Download Button (Cyan/Blue Solid) */
+/* Download button */
 .btn-download {
     background: linear-gradient(180deg, #36b9cc 0%, #2c9faf 100%);
     color: white;
-    box-shadow: 0 4px 0 #1a8a9d; /* 3D Press Effect */
+    box-shadow: 0 4px 0 #1a8a9d; 
     border: none;
 }
 .btn-download:hover {
@@ -296,7 +287,7 @@ body {
     box-shadow: none;
 }
 
-/* Play Button (For My Arsenal - Green) */
+/* Play button */
 .btn-play {
     background: linear-gradient(135deg, #1cc88a 0%, #13855c 100%);
     color: white;

@@ -2,7 +2,6 @@ const usernameEl = document.getElementById("username");
 const emailEl = document.getElementById("email");
 const passwordEl = document.getElementById("password");
 const confirmEl = document.getElementById("confirmPassword");
-
 const resultMsg = document.getElementById("resultMsg");
 
 const errUsername = document.getElementById("errUsername");
@@ -10,12 +9,12 @@ const errEmail = document.getElementById("errEmail");
 const errPassword = document.getElementById("errPassword");
 const errConfirm = document.getElementById("errConfirm");
 
-// -----------------------------
-// Helpers
-// -----------------------------
+/* Reset error states */
 function clearErrors() {
-    errUsername.innerText = ""; errEmail.innerText = "";
-    errPassword.innerText = ""; errConfirm.innerText = "";
+    errUsername.innerText = "";
+    errEmail.innerText = "";
+    errPassword.innerText = "";
+    errConfirm.innerText = "";
 
     errUsername.style.display = "none";
     errEmail.style.display = "none";
@@ -30,26 +29,26 @@ function clearErrors() {
     resultMsg.innerText = "";
 }
 
+/* Show validation error */
 function showError(el, errEl, msg) {
     errEl.innerText = msg;
     errEl.style.display = "block";
     el.classList.add("input-error");
 }
 
+/* Email regex check */
 function isValidEmail(email) {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 }
 
+/* Username regex check */
 function isValidUsername(u) {
     return /^[a-zA-Z0-9_]{3,20}$/.test(u);
 }
 
-// -----------------------------
-// Submit Registration (NO live check)
-// -----------------------------
+/* Handle registration submission */
 document.getElementById("registerForm").addEventListener("submit", function (e) {
     e.preventDefault();
-
     clearErrors();
 
     const username = usernameEl.value.trim();
@@ -59,47 +58,40 @@ document.getElementById("registerForm").addEventListener("submit", function (e) 
 
     let hasError = false;
 
-    // Username
     if (username === "") {
         hasError = true;
         showError(usernameEl, errUsername, "Username is required.");
     } else if (!isValidUsername(username)) {
         hasError = true;
-        showError(usernameEl, errUsername, "Username must be 3-20 chars (letters, numbers, underscore).");
+        showError(usernameEl, errUsername, "Username: 3-20 chars.");
     }
 
-    // Email
     if (email === "") {
         hasError = true;
         showError(emailEl, errEmail, "Email is required.");
     } else if (!isValidEmail(email)) {
         hasError = true;
-        showError(emailEl, errEmail, "Invalid email format. Example: user@gmail.com");
+        showError(emailEl, errEmail, "Invalid email format.");
     }
 
-    // Password
     if (password === "") {
         hasError = true;
         showError(passwordEl, errPassword, "Password is required.");
     } else if (password.length < 6) {
         hasError = true;
-        showError(passwordEl, errPassword, "Password must be at least 6 characters.");
+        showError(passwordEl, errPassword, "Min 6 characters.");
     }
 
-    // Confirm
     if (confirmPassword === "") {
         hasError = true;
-        showError(confirmEl, errConfirm, "Confirm password is required.");
+        showError(confirmEl, errConfirm, "Confirm password required.");
     } else if (password !== "" && password !== confirmPassword) {
         hasError = true;
-        showError(confirmEl, errConfirm, "Passwords do not match.");
+        showError(confirmEl, errConfirm, "Passwords mismatch.");
     }
 
-    if (hasError) {
-        return; // show all errors at once
-    }
+    if (hasError) return;
 
-    // Send JSON to PHP
     let data = {
         username: username,
         email: email,
@@ -107,18 +99,14 @@ document.getElementById("registerForm").addEventListener("submit", function (e) 
         confirmPassword: confirmPassword
     };
 
-    let jsonData = JSON.stringify(data);
-
     let xhttp = new XMLHttpRequest();
     xhttp.open("POST", "../php/register_controller.php", true);
     xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 
     xhttp.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
-
             let response = JSON.parse(this.responseText);
 
-            // PHP field errors
             if (response.status === "field_error" && response.errors) {
                 if (response.errors.username) showError(usernameEl, errUsername, response.errors.username);
                 if (response.errors.email) showError(emailEl, errEmail, response.errors.email);
@@ -127,18 +115,15 @@ document.getElementById("registerForm").addEventListener("submit", function (e) 
                 return;
             }
 
-            // If success: popup + redirect to login
             if (response.status === "success") {
-                alert("Registration successful! Redirecting to Login...");
-                window.location.href = "login.php"; // same folder: Auth/MVC/html/
+                alert("Success! Redirecting...");
+                window.location.href = "login.php";
                 return;
             }
 
-            // Otherwise show message (optional)
             resultMsg.innerText = response.message || "";
-
         }
     };
 
-    xhttp.send("data=" + encodeURIComponent(jsonData));
+    xhttp.send("data=" + encodeURIComponent(JSON.stringify(data)));
 });

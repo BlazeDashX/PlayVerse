@@ -1,8 +1,9 @@
+/* Initial data load */
 window.onload = function() {
     loadProfile();
 };
 
-// --- MAIN: Load Profile Data (Info + Stats + Badges) ---
+/* Fetch profile data */
 function loadProfile() {
     let xhttp = new XMLHttpRequest();
     xhttp.open('POST', '../php/profile_controller.php', true);
@@ -13,20 +14,19 @@ function loadProfile() {
             let res = JSON.parse(this.responseText);
             
             if(res.status === 'success') {
-                // 1. Fill Left Card Info
+                /* Update profile card */
                 document.getElementById('disp_username').innerText = res.user.username;
                 document.getElementById('disp_email').innerText = res.user.email;
                 document.getElementById('disp_joined').innerText = "JOINED: " + res.user.created_at.split(' ')[0];
                 
-                // 2. Fill Stats
+                /* Update stats */
                 document.getElementById('stat_ach').innerText = res.stats.achievements;
                 document.getElementById('stat_spent').innerText = "$" + res.stats.total_spent;
 
-                // 3. Fill Input Fields
+                /* Update inputs */
                 document.getElementById('in_username').value = res.user.username;
                 document.getElementById('in_email').value = res.user.email;
 
-                // 4. Render Badges (New Feature)
                 renderBadges(res.badges);
             }
         }
@@ -34,14 +34,13 @@ function loadProfile() {
     xhttp.send('action=fetch_data');
 }
 
-// --- HELPER: Render Badges ---
+/* Render achievement badges */
 function renderBadges(badges) {
     let badgeContainer = document.getElementById('badge_list');
     let badgeHTML = "";
 
     if (badges && badges.length > 0) {
         badges.forEach(b => {
-            // Assign Emojis based on code
             let icon = "🏆";
             if(b.code === 'first_buy') icon = "⚔️";
             if(b.code === 'renter') icon = "🏎️";
@@ -55,52 +54,50 @@ function renderBadges(badges) {
         });
         badgeContainer.innerHTML = badgeHTML;
     } else {
-        badgeContainer.innerHTML = "<p style='color:#777; font-size:12px; margin-top:5px;'>No badges unlocked yet.</p>";
+        badgeContainer.innerHTML = "<p style='color:#777; font-size:12px; margin-top:5px;'>No badges unlocked.</p>";
     }
 }
 
-// --- FORM 1: Update Basic Info ---
+/* Handle info update */
 document.getElementById('infoForm').addEventListener('submit', function(e) {
     e.preventDefault();
     let u = document.getElementById('in_username').value.trim();
     let em = document.getElementById('in_email').value.trim();
 
-    // Validation
     if(u === "" || em === "") {
-        showPopup("ERROR", "Username and Email cannot be empty", true);
+        showPopup("ERROR", "Fields required", true);
         return;
     }
     
     sendUpdate('action=update_info&username='+encodeURIComponent(u)+'&email='+encodeURIComponent(em));
 });
 
-// --- FORM 2: Update Password ---
+/* Handle password update */
 document.getElementById('passForm').addEventListener('submit', function(e) {
     e.preventDefault();
     let oldP = document.getElementById('old_pass').value;
     let newP = document.getElementById('new_pass').value;
     let confP = document.getElementById('confirm_pass').value;
     
-    // Validation
     if(oldP === "" || newP === "" || confP === "") {
-        showPopup("ERROR", "All password fields are required", true);
+        showPopup("ERROR", "Fields required", true);
         return;
     }
 
     if(newP.length < 6) {
-        showPopup("WEAK PASSWORD", "New password must be at least 6 characters", true);
+        showPopup("WEAK", "Minimum 6 characters", true);
         return;
     }
 
     if(newP !== confP) {
-        showPopup("MISMATCH", "New Password and Confirm Password do not match", true);
+        showPopup("MISMATCH", "Passwords must match", true);
         return;
     }
     
     sendUpdate('action=update_password&old_password='+encodeURIComponent(oldP)+'&new_password='+encodeURIComponent(newP)+'&confirm_password='+encodeURIComponent(confP));
 });
 
-// --- AJAX HELPER: Send Data ---
+/* Generic update request */
 function sendUpdate(params) {
     let xhttp = new XMLHttpRequest();
     xhttp.open('POST', '../php/profile_controller.php', true);
@@ -110,19 +107,10 @@ function sendUpdate(params) {
         if (this.readyState == 4 && this.status == 200) {
             let res = JSON.parse(this.responseText);
             
-            // Show result in Custom Popup
             if(res.status === 'success') {
                 showPopup("SUCCESS", res.message, false);
-                
-                // If Profile Info updated -> Reload card
-                if(params.includes('update_info')) { 
-                    loadProfile(); 
-                }
-                // If Password updated -> Clear form
-                if(params.includes('update_password')) {
-                    document.getElementById('passForm').reset();
-                }
-
+                if(params.includes('update_info')) loadProfile(); 
+                if(params.includes('update_password')) document.getElementById('passForm').reset();
             } else {
                 showPopup("ERROR", res.message, true);
             }
@@ -131,24 +119,23 @@ function sendUpdate(params) {
     xhttp.send(params);
 }
 
-// --- ACTION: Delete Account ---
+/* Handle account deletion */
 function deleteAccount() {
-    if(confirm("⚠ DANGER: Are you sure you want to delete your account? This cannot be undone.")) {
+    if(confirm("Confirm permanent deletion?")) {
         let xhttp = new XMLHttpRequest();
         xhttp.open('POST', '../php/profile_controller.php', true);
         xhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-        xhttp.send('action=delete_account');
         
         xhttp.onreadystatechange = function() {
             if (this.readyState == 4 && this.status == 200) {
-                alert("Account Deleted. Logging out...");
                 window.location.href = "../../../Auth/MVC/html/login.php";
             }
         };
+        xhttp.send('action=delete_account');
     }
 }
 
-// --- UI: Toggle Password Visibility ---
+/* Toggle password display */
 function togglePasswords() {
     let inputs = document.querySelectorAll('.pass-input');
     let checkBox = document.getElementById('togglePass');
@@ -158,7 +145,7 @@ function togglePasswords() {
     });
 }
 
-// --- UI: Custom Popup Logic ---
+/* Modal UI logic */
 function showPopup(title, msg, isError) {
     let modal = document.getElementById('statusModal');
     let titleEl = document.getElementById('modalTitle');
@@ -186,6 +173,7 @@ function showPopup(title, msg, isError) {
     modal.classList.add('show');
 }
 
+/* Close status modal */
 function closeModal() {
     document.getElementById('statusModal').classList.remove('show');
 }

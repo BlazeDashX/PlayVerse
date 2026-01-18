@@ -1,10 +1,10 @@
 <?php
 require_once(__DIR__ . '/../../../shared/db.php');
 
-// 1. Get Popular Games + Check Ownership
+/* Fetch trending games */
 function getPopularGames($userId, $limit = 4) {
     global $conn;
-    // Join with payments to see if THIS user bought it
+    
     $sql = "SELECT g.*, 
             COALESCE(s.download_count, 0) as downloads,
             p.payment_type as owned_status
@@ -27,7 +27,7 @@ function getPopularGames($userId, $limit = 4) {
     return $games;
 }
 
-// 2. Get All Games + Check Ownership
+/* Fetch active games */
 function getAllGamesUser($userId) {
     global $conn;
     $sql = "SELECT g.*, p.payment_type as owned_status
@@ -48,7 +48,7 @@ function getAllGamesUser($userId) {
     return $games;
 }
 
-// 3. Get Single Game Details
+/* Fetch record details */
 function getGameDetails($id) {
     global $conn;
     $stmt = mysqli_prepare($conn, "SELECT * FROM games WHERE id = ? AND is_active = 1");
@@ -58,7 +58,7 @@ function getGameDetails($id) {
     return mysqli_fetch_assoc($result);
 }
 
-// 4. Increment Popularity (View Count)
+/* Update popularity metrics */
 function incrementPopularity($gameId) {
     global $conn;
     $check = mysqli_query($conn, "SELECT game_id FROM game_stats WHERE game_id=$gameId");

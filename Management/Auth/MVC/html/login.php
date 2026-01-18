@@ -14,7 +14,6 @@
 
     <h2>Sign In</h2>
 
-    <!-- NO HTML validation -->
     <form id="loginForm" novalidate>
 
         <input type="text" id="usernameOrEmail" placeholder="Username or Email">

@@ -4,7 +4,7 @@ require_once('../db/paymentModel.php');
 
 header('Content-Type: application/json');
 
-// Ensure user is logged in
+/* Check authentication */
 if (!isset($_SESSION['user_id'])) {
     echo json_encode(["status" => "error", "message" => "Unauthorized"]);
     exit();
@@ -13,19 +13,19 @@ if (!isset($_SESSION['user_id'])) {
 $action = $_POST['action'] ?? '';
 
 if ($action === 'pay') {
-    // 1. Decode JSON Data
+    /* Decode request payload */
     if (!isset($_POST['data'])) {
         echo json_encode(["status" => "error", "message" => "No data"]);
         exit();
     }
     $data = json_decode($_POST['data'], true);
 
-    // 2. Validate Inputs (Demo Logic)
+    /* Validate payment credentials */
     $cardNum = str_replace(' ', '', $data['cardNumber']);
     $cvv = $data['cvv'];
     
     if (strlen($cardNum) !== 16 || !ctype_digit($cardNum)) {
-        echo json_encode(["status" => "error", "message" => "Invalid Card Number (must be 16 digits)"]);
+        echo json_encode(["status" => "error", "message" => "Invalid Card Number"]);
         exit();
     }
     if (strlen($cvv) !== 3 || !ctype_digit($cvv)) {
@@ -33,28 +33,26 @@ if ($action === 'pay') {
         exit();
     }
 
-    // 3. Prepare Data for DB
+    /* Map transaction data */
     $userId = $_SESSION['user_id'];
     $gameId = (int)$data['gameId'];
-    $type = $data['type']; // 'buy' or 'rent'
+    $type = $data['type']; 
     $amount = (float)$data['amount'];
     $holder = $data['holder'];
     $last4 = substr($cardNum, -4);
     $expiry = $data['expiry'];
 
-    // 4. Process
+    /* Execute transaction logic */
     if (processPayment($userId, $gameId, $type, $amount, $holder, $last4, $expiry)) {
         
-        // --- NEW: TRIGGER ACHIEVEMENT CHECK ---
+        /* Evaluate achievement unlocks */
         require_once('../db/achievementModel.php');
-        checkAndUnlock($userId, $type); // $type is 'buy' or 'rent'
-        // -
-    echo json_encode(["status" => "success", "message" => "Transaction Approved"]);
+        checkAndUnlock($userId, $type); 
+
+        echo json_encode(["status" => "success", "message" => "Transaction Approved"]);
     } else {
         echo json_encode(["status" => "error", "message" => "Database Error"]);
     }
     exit();
-
-
 }
 ?>

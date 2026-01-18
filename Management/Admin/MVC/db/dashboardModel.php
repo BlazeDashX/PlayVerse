@@ -1,9 +1,11 @@
 <?php
 require_once(__DIR__ . '/../../../shared/db.php');
 
+/* Get administrative statistics */
 function getAdminStats(){
     global $conn;
 
+    /* Initialize statistics array */
     $stats = [
         "total_games" => 0,
         "total_stock" => 0,
@@ -15,7 +17,7 @@ function getAdminStats(){
         "month_rent_earning" => 0.0
     ];
 
-    // 1. Inventory Stats
+    /* Fetch inventory metrics */
     $q1 = "SELECT
             COUNT(*) AS total_games,
             COALESCE(SUM(stock_qty),0) AS total_stock,
@@ -32,14 +34,13 @@ function getAdminStats(){
         $stats["out_stock_games"] = (int)$row["out_stock_games"];
     }
 
-    // 2. Sales Stats (ALL TIME - Date Filter Removed)
+    /* Fetch transaction metrics */
     $q2 = "SELECT
             SUM(CASE WHEN payment_type='buy' THEN 1 ELSE 0 END) AS month_sold,
             SUM(CASE WHEN payment_type='rent' THEN 1 ELSE 0 END) AS month_rented,
             COALESCE(SUM(CASE WHEN payment_type='buy' THEN amount ELSE 0 END),0) AS month_sell_earning,
             COALESCE(SUM(CASE WHEN payment_type='rent' THEN amount ELSE 0 END),0) AS month_rent_earning
         FROM payments"; 
-        // REMOVED: WHERE YEAR(created_at)=YEAR(CURDATE())...
         
     $r2 = mysqli_query($conn, $q2);
     if($r2){

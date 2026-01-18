@@ -1,4 +1,6 @@
-* { box-sizing: border-box; }
+* {
+    box-sizing: border-box;
+}
 
 body {
     margin: 0;
@@ -11,6 +13,7 @@ body {
     align-items: center;
 }
 
+/* Container box */
 .checkout-container {
     width: 100%;
     max-width: 800px;
@@ -21,23 +24,26 @@ body {
     box-shadow: 0 0 30px rgba(102, 252, 241, 0.15);
 }
 
+/* Header border */
 .terminal-header {
     border-bottom: 1px solid #45a29e;
     margin-bottom: 25px;
     padding-bottom: 10px;
 }
+
 .terminal-header h2 {
     margin: 0;
     font-family: 'Rajdhani', sans-serif;
     letter-spacing: 2px;
 }
 
+/* Grid layout */
 .content-grid {
     display: flex;
     gap: 30px;
 }
 
-/* Order Summary */
+/* Order summary */
 .summary-box {
     flex: 1;
     background: #0b0c10;
@@ -45,6 +51,7 @@ body {
     border-radius: 6px;
     text-align: center;
 }
+
 .thumb {
     width: 100%;
     height: 150px;
@@ -53,7 +60,13 @@ body {
     margin-bottom: 15px;
     border: 1px solid #45a29e;
 }
-.summary-details h3 { margin: 0; color: #fff; font-size: 18px; }
+
+.summary-details h3 {
+    margin: 0;
+    color: #fff;
+    font-size: 18px;
+}
+
 .total-price {
     font-size: 32px;
     color: #66fcf1;
@@ -62,8 +75,10 @@ body {
     margin-top: 10px;
 }
 
-/* Form */
-.payment-form { flex: 2; }
+/* Form section */
+.payment-form {
+    flex: 2;
+}
 
 label {
     display: block;
@@ -74,6 +89,7 @@ label {
     letter-spacing: 1px;
 }
 
+/* Terminal inputs */
 input {
     width: 100%;
     background: #0b0c10;
@@ -81,14 +97,26 @@ input {
     color: #fff;
     padding: 12px;
     margin-bottom: 15px;
-    font-family: 'Courier New', monospace; /* Monospace for card numbers */
+    font-family: 'Courier New', monospace;
     border-radius: 4px;
 }
-input:focus { outline: none; border-color: #66fcf1; box-shadow: 0 0 10px rgba(102,252,241,0.2); }
 
-.row { display: flex; gap: 15px; }
-.col { flex: 1; }
+input:focus {
+    outline: none;
+    border-color: #66fcf1;
+    box-shadow: 0 0 10px rgba(102,252,241,0.2);
+}
 
+.row {
+    display: flex;
+    gap: 15px;
+}
+
+.col {
+    flex: 1;
+}
+
+/* Payment button */
 .btn-pay {
     width: 100%;
     padding: 15px;
@@ -102,9 +130,17 @@ input:focus { outline: none; border-color: #66fcf1; box-shadow: 0 0 10px rgba(10
     cursor: pointer;
     transition: 0.3s;
 }
-.btn-pay:hover { background: #fff; }
-.btn-pay:disabled { background: #45a29e; cursor: not-allowed; }
 
+.btn-pay:hover {
+    background: #fff;
+}
+
+.btn-pay:disabled {
+    background: #45a29e;
+    cursor: not-allowed;
+}
+
+/* Exit link */
 .btn-cancel {
     display: block;
     text-align: center;
@@ -115,44 +151,108 @@ input:focus { outline: none; border-color: #66fcf1; box-shadow: 0 0 10px rgba(10
     font-family: 'Rajdhani', sans-serif;
     letter-spacing: 1px;
 }
-.btn-cancel:hover { text-decoration: underline; }
 
-.msg-text { text-align: center; font-weight: bold; margin-top: 15px; min-height: 20px; }
+.btn-cancel:hover {
+    text-decoration: underline;
+}
 
-/* --- MODAL STYLES --- */
+.msg-text {
+    text-align: center;
+    font-weight: bold;
+    margin-top: 15px;
+    min-height: 20px;
+}
+
+/* Modal backdrop */
 .modal-overlay {
-    position: fixed; top: 0; left: 0;
-    width: 100%; height: 100%;
-    background: rgba(0, 0, 0, 0.85); /* Darker backdrop */
-    display: flex; justify-content: center; align-items: center;
-    visibility: hidden; opacity: 0;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    visibility: hidden;
+    opacity: 0;
     transition: 0.3s;
     z-index: 1000;
 }
-.modal-overlay.show { visibility: visible; opacity: 1; }
 
+.modal-overlay.show {
+    visibility: visible;
+    opacity: 1;
+}
+
+/* Modal window */
 .modal-box {
     background: #1f2833;
     border: 2px solid #66fcf1;
     padding: 30px;
     border-radius: 8px;
     text-align: center;
-    width: 90%; max-width: 400px;
+    width: 90%;
+    max-width: 400px;
     box-shadow: 0 0 40px rgba(102, 252, 241, 0.2);
-    transform: scale(0.9); transition: 0.3s;
+    transform: scale(0.9);
+    transition: 0.3s;
 }
-.modal-overlay.show .modal-box { transform: scale(1); }
 
-.modal-title { color: #66fcf1; font-family: 'Rajdhani', sans-serif; margin-top: 0; }
-.modal-text { color: #c5c6c7; font-size: 16px; margin: 20px 0; }
-.highlight { color: #fff; font-weight: bold; font-size: 20px; }
+.modal-overlay.show .modal-box {
+    transform: scale(1);
+}
 
-.modal-actions { display: flex; gap: 15px; justify-content: center; }
+.modal-title {
+    color: #66fcf1;
+    font-family: 'Rajdhani', sans-serif;
+    margin-top: 0;
+}
+
+.modal-text {
+    color: #c5c6c7;
+    font-size: 16px;
+    margin: 20px 0;
+}
+
+.highlight {
+    color: #fff;
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.modal-actions {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+}
+
+/* Modal buttons */
 .btn-modal {
-    padding: 10px 20px; border: none; font-weight: bold; cursor: pointer;
-    font-family: 'Rajdhani', sans-serif; letter-spacing: 1px;
+    padding: 10px 20px;
+    border: none;
+    font-weight: bold;
+    cursor: pointer;
+    font-family: 'Rajdhani', sans-serif;
+    letter-spacing: 1px;
 }
-.btn-yes { background: #66fcf1; color: #0b0c10; }
-.btn-yes:hover { background: #fff; }
-.btn-no { background: transparent; border: 1px solid #e74c3c; color: #e74c3c; }
-.btn-no:hover { background: #e74c3c; color: white; }
+
+.btn-yes {
+    background: #66fcf1;
+    color: #0b0c10;
+}
+
+.btn-yes:hover {
+    background: #fff;
+}
+
+.btn-no {
+    background: transparent;
+    border: 1px solid #e74c3c;
+    color: #e74c3c;
+}
+
+.btn-no:hover {
+    background: #e74c3c;
+    color: white;
+}

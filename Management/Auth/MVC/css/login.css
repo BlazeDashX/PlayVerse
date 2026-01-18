@@ -1,9 +1,9 @@
-*{
+* {
     box-sizing: border-box;
     font-family: Arial, sans-serif;
 }
 
-body{
+body {
     margin: 0;
     height: 100vh;
     background: linear-gradient(120deg, #0f2027, #203a43, #2c5364);
@@ -12,7 +12,8 @@ body{
     align-items: center;
 }
 
-.auth-container{
+/* Wrapper styles */
+.auth-container {
     width: 380px;
     background: #111;
     padding: 30px;
@@ -21,23 +22,25 @@ body{
     text-align: center;
 }
 
-.logo{
+/* Branding styles */
+.logo {
     font-size: 26px;
     font-weight: bold;
     color: #00bfff;
     margin-bottom: 10px;
 }
 
-.logo span{
+.logo span {
     color: white;
 }
 
-h2{
+h2 {
     margin-bottom: 20px;
     color: white;
 }
 
-input{
+/* Field styles */
+input {
     width: 100%;
     padding: 10px;
     margin-top: 12px;
@@ -47,6 +50,7 @@ input{
     font-size: 14px;
 }
 
+/* Action button */
 button {
     width: 100%;
     padding: 10px;
@@ -57,34 +61,34 @@ button {
     color: white;
     font-size: 15px;
     cursor: pointer;
-    /* Add this line below */
-    transition: background 0.3s ease; 
+    transition: background 0.3s ease;
 }
 
-button:hover{
+button:hover {
     background: #009acd;
 }
 
-.bottom-link{
+/* Navigation links */
+.bottom-link {
     margin-top: 15px;
     font-size: 14px;
     color: #ccc;
 }
 
-.bottom-link a{
+.bottom-link a {
     color: #00bfff;
     text-decoration: none;
 }
 
-.bottom-link a:hover{
+.bottom-link a:hover {
     text-decoration: underline;
 }
 
-.err{
+/* Validation message */
+.err {
     display: none;
     text-align: left;
     margin-top: 6px;
     font-size: 13px;
     color: #e74c3c;
 }
-
